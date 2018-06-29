@@ -2,13 +2,13 @@
 using System.IO;
 using dotnet_common.Interface;
 
-namespace dotnet_common
+namespace dotnet_common.FileSystemUtility
 {
     /// <summary>
-    /// System implementation of the file system utility
+    /// System.IO implementation of the file system utility
     /// </summary>
     /// <seealso cref="dotnet_common.Interface.IFileSystemUtility" />
-    public class SystemFileSystemUtility : IFileSystemUtility
+    public class SystemIO : IFileSystemUtility
     {
         /// <summary>
         /// Reads the file bytes and can be set to throw an exception if the file is not found.

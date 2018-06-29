@@ -1,5 +1,6 @@
 ﻿using System;
 using dotnet_common.Interface;
+using dotnet_common.Marshaller;
 using dotnet_common.Test.Model;
 using Xunit;
 
@@ -13,7 +14,7 @@ namespace dotnet_common.Test
         /// <summary>
         /// The marshaller
         /// </summary>
-        private readonly IMarshaller _marshaller = new DataContractSerializerMarshaller();
+        private readonly IMarshaller _marshaller = new DataContractSerializer();
 
         /// <summary>
         /// Tests that SerializeObject for a model executes positive.

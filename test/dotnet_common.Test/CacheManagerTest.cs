@@ -4,6 +4,7 @@ using dotnet_common.Test.Interface;
 using Microsoft.Extensions.Caching.Memory;
 using Moq;
 using Xunit;
+using MemoryCache = dotnet_common.CacheManager.MemoryCache;
 
 namespace dotnet_common.Test
 {
@@ -15,7 +16,8 @@ namespace dotnet_common.Test
         /// <summary>
         /// The cache manager
         /// </summary>
-        private readonly ICacheManager _cacheManager = new MemoryCacheManager(new MemoryCache(new MemoryCacheOptions()));
+        private readonly ICacheManager _cacheManager =
+            new MemoryCache(new Microsoft.Extensions.Caching.Memory.MemoryCache(new MemoryCacheOptions()));
         
         /// <summary>
         /// Tests that ReturnFromCache with no parameters executes positive.

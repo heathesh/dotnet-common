@@ -4,13 +4,13 @@ using dotnet_common.Interface;
 using dotnet_common.Model;
 using Microsoft.Extensions.Caching.Memory;
 
-namespace dotnet_common
+namespace dotnet_common.CacheManager
 {
     /// <summary>
-    /// Memory cache manager implementation of the cache manager
+    /// Memory cache implementation of the cache manager
     /// </summary>
     /// <seealso cref="dotnet_common.Interface.ICacheManager" />
-    public class MemoryCacheManager : ICacheManager
+    public class MemoryCache : ICacheManager
     {
         /// <summary>
         /// The memory cache
@@ -18,10 +18,10 @@ namespace dotnet_common
         private readonly IMemoryCache _memoryCache;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="MemoryCacheManager"/> class.
+        /// Initializes a new instance of the <see cref="MemoryCache"/> class.
         /// </summary>
         /// <param name="memoryCache">The memory cache.</param>
-        public MemoryCacheManager(IMemoryCache memoryCache)
+        public MemoryCache(IMemoryCache memoryCache)
         {
             _memoryCache = memoryCache;
         }

@@ -1,14 +1,13 @@
 ﻿using System.IO;
-using System.Runtime.Serialization;
 using dotnet_common.Interface;
 
-namespace dotnet_common
+namespace dotnet_common.Marshaller
 {
     /// <summary>
     /// Data contract serializer implementation of the marshaller
     /// </summary>
     /// <seealso cref="dotnet_common.Interface.IMarshaller" />
-    public class DataContractSerializerMarshaller : IMarshaller
+    public class DataContractSerializer : IMarshaller
     {
         /// <summary>
         /// Serializes the object to a string.
@@ -22,7 +21,7 @@ namespace dotnet_common
             {
                 using (var reader = new StreamReader(memoryStream))
                 {
-                    var serializer = new DataContractSerializer(entity.GetType());
+                    var serializer = new System.Runtime.Serialization.DataContractSerializer(entity.GetType());
                     serializer.WriteObject(memoryStream, entity);
                     memoryStream.Position = 0;
                     return reader.ReadToEnd();
@@ -43,7 +42,7 @@ namespace dotnet_common
                 var data = System.Text.Encoding.UTF8.GetBytes(entity);
                 stream.Write(data, 0, data.Length);
                 stream.Position = 0;
-                var deserializer = new DataContractSerializer(typeof(T));
+                var deserializer = new System.Runtime.Serialization.DataContractSerializer(typeof(T));
                 return (T)deserializer.ReadObject(stream);
             }
         }
