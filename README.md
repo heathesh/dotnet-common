@@ -1,2 +1,2 @@
 # dotnet_common
-Commonly used helpers targetting .net standard
+Commonly used helpers for dotnet core
