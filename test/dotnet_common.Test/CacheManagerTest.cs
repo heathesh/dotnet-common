@@ -1,5 +1,4 @@
 ﻿using dotnet_common.Model;
-using System;
 using dotnet_common.Interface;
 using dotnet_common.Test.Interface;
 using Microsoft.Extensions.Caching.Memory;
