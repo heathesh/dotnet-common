@@ -2,6 +2,10 @@
 
   <PropertyGroup>
     <TargetFramework>netcoreapp2.0</TargetFramework>
+    <Authors>Heathesh Bhandari</Authors>
+    <Company>MobileDev.co.za</Company>
+    <Product />
+    <Description>Commonly used helpers for dotnet core.</Description>
   </PropertyGroup>
 
   <ItemGroup>
