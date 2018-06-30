@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Text;
+using System.Threading.Tasks;
 using dotnet_common.Interface;
 using dotnet_common.Model;
 using Microsoft.Extensions.Caching.Memory;
@@ -44,6 +45,31 @@ namespace dotnet_common.CacheManager
             if (!Exists(generatedCacheKey))
             {
                 var item = itemToCache();
+
+                _memoryCache.Set(generatedCacheKey, item, TimeSpan.FromMinutes(minutesToCache));
+            }
+
+            return _memoryCache.Get<T>(generatedCacheKey);
+        }
+
+        /// <summary>
+        /// Based on the cache key specified will either return the cached object, or run the function
+        /// and then cache the result and return it asynchronously.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="itemToCache">The item to cache.</param>
+        /// <param name="minutesToCache">The minutes to cache.</param>
+        /// <param name="cacheKey">The cache key.</param>
+        /// <param name="parameters">The parameters.</param>
+        /// <returns></returns>
+        public async Task<T> ReturnFromCacheAsync<T>(Func<Task<T>> itemToCache, int minutesToCache, string cacheKey,
+            params CacheKeyParameter[] parameters)
+        {
+            var generatedCacheKey = GenerateCacheKey(cacheKey, parameters);
+
+            if (!Exists(generatedCacheKey))
+            {
+                var item = await itemToCache();
 
                 _memoryCache.Set(generatedCacheKey, item, TimeSpan.FromMinutes(minutesToCache));
             }

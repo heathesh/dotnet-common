@@ -1,4 +1,6 @@
-﻿using dotnet_common.Model;
+﻿using System;
+using System.Threading.Tasks;
+using dotnet_common.Model;
 using dotnet_common.Interface;
 using dotnet_common.Test.Interface;
 using Microsoft.Extensions.Caching.Memory;
@@ -105,6 +107,112 @@ namespace dotnet_common.Test
             object Function() => objectToCache;
 
             var cachedItem = _cacheManager.ReturnFromCache(Function, 10, "ReturnFromCache_NullObject_Executes_Positive");
+
+            Assert.Null(cachedItem);
+        }
+
+        /// <summary>
+        /// Tests that ReturnFromCache with no parameters executes positive.
+        /// </summary>
+        [Fact]
+        public async Task ReturnFromCacheAsync_NoParameters_Executes_Positive()
+        {
+            var itemToCache = "Testing Caching";
+
+            var cacheManagerTest = new Mock<ICacheManagerTest>();
+            cacheManagerTest.Setup(_ => _.ReturnStringAsync(itemToCache)).Returns(Task.FromResult(itemToCache));
+
+            async Task<string> Function()
+            {
+                return await cacheManagerTest.Object.ReturnStringAsync(itemToCache);
+            }
+
+            var cachedItem =
+                await _cacheManager.ReturnFromCacheAsync(Function, 10, "ReturnFromCache_Executes_Positive");
+
+            Assert.Equal(itemToCache, cachedItem);
+
+            var returnedFromCache =
+                await _cacheManager.ReturnFromCacheAsync(Function, 10, "ReturnFromCache_Executes_Positive");
+
+            Assert.Equal(cachedItem, returnedFromCache);
+            cacheManagerTest.Verify(_ => _.ReturnStringAsync(itemToCache), Times.Once);
+        }
+
+        /// <summary>
+        /// Tests that ReturnFromCache with string parameters executes positive.
+        /// </summary>
+        [Fact]
+        public async Task ReturnFromCacheAsync_WithStringParameters_Executes_Positive()
+        {
+            var itemToCache = "Testing Caching";
+
+            var cacheManagerTest = new Mock<ICacheManagerTest>();
+            cacheManagerTest.Setup(_ => _.ReturnStringAsync(itemToCache)).Returns(Task.FromResult(itemToCache));
+
+            async Task<string> Function()
+            {
+                return await cacheManagerTest.Object.ReturnStringAsync(itemToCache);
+            }
+
+            var cachedItem = await _cacheManager.ReturnFromCacheAsync(Function, 10,
+                "ReturnFromCache_WithStringParameters_Executes_Positive", new CacheKeyParameter("param1", "value1"),
+                new CacheKeyParameter("param2", "value2"));
+
+            Assert.Equal(itemToCache, cachedItem);
+
+            var returnedFromCache = await _cacheManager.ReturnFromCacheAsync(Function, 10,
+                "ReturnFromCache_WithStringParameters_Executes_Positive", new CacheKeyParameter("param1", "value1"),
+                new CacheKeyParameter("param2", "value2"));
+
+            Assert.Equal(cachedItem, returnedFromCache);
+            cacheManagerTest.Verify(_ => _.ReturnStringAsync(itemToCache), Times.Once);
+        }
+
+        /// <summary>
+        /// Tests that ReturnFromCache with string parameters executes positive.
+        /// </summary>
+        [Fact]
+        public async Task ReturnFromCacheAsync_WithIntParameters_Executes_Positive()
+        {
+            var itemToCache = "Testing Caching";
+
+            var cacheManagerTest = new Mock<ICacheManagerTest>();
+            cacheManagerTest.Setup(_ => _.ReturnStringAsync(itemToCache)).Returns(Task.FromResult(itemToCache));
+
+            async Task<string> Function()
+            {
+                return await cacheManagerTest.Object.ReturnStringAsync(itemToCache);
+            }
+
+            var cachedItem = await _cacheManager.ReturnFromCacheAsync(Function, 10,
+                "ReturnFromCache_WithIntParameters_Executes_Positive", new CacheKeyParameter("param1", 100),
+                new CacheKeyParameter("param2", 999));
+
+            Assert.Equal(itemToCache, cachedItem);
+
+            var returnedFromCache = await _cacheManager.ReturnFromCacheAsync(Function, 10,
+                "ReturnFromCache_WithIntParameters_Executes_Positive");
+
+            Assert.Equal(cachedItem, returnedFromCache);
+            cacheManagerTest.Verify(_ => _.ReturnStringAsync(itemToCache), Times.Exactly(2));
+        }
+
+        /// <summary>
+        /// Tests that ReturnFromCache for null object executes positive
+        /// </summary>
+        [Fact]
+        public async Task ReturnFromCacheAsync_NullObject_Executes_Positive()
+        {
+            object objectToCache = null;
+
+            async Task<object> Function()
+            {
+                return await Task.FromResult(objectToCache);
+            }
+
+            var cachedItem =
+                await _cacheManager.ReturnFromCacheAsync(Function, 10, "ReturnFromCache_NullObject_Executes_Positive");
 
             Assert.Null(cachedItem);
         }
