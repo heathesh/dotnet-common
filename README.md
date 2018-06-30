@@ -5,13 +5,13 @@ Commonly used helpers for dotnet core.
 This package can be installed via nuget using:
 
 ```
-Install-Package dotnet_common -Version 1.0.0
+Install-Package dotnet_common
 ```
 
 Or via the dotnet CLI using:
 
 ```
-dotnet add package dotnet_common --version 1.0.0
+dotnet add package dotnet_common
 ```
 
 ## Usage
