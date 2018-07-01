@@ -27,7 +27,7 @@ namespace dotnet_common.Sample.Web.Controllers
         /// </summary>
         /// <returns></returns>
         [HttpGet]
-        public string Get()
+        public dynamic Get()
         {
             var marshallerSample = new MarshallerSample
             {
@@ -37,7 +37,17 @@ namespace dotnet_common.Sample.Web.Controllers
                 Surname = "Doe"
             };
 
-            return _marshaller.SerializeObject(marshallerSample);
+            var serializedEntity = _marshaller.SerializeObject(marshallerSample);
+            var deserializedEntity = _marshaller.DeserializeObject<MarshallerSample>(serializedEntity);
+
+            dynamic result = new
+            {
+                Entity = marshallerSample,
+                SerializedEntity = serializedEntity,
+                DeserializedEntity = deserializedEntity
+            };
+
+            return result;
         }
     }
 }
