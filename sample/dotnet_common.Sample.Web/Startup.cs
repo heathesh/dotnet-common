@@ -31,9 +31,19 @@ namespace dotnet_common.Sample.Web
         /// <param name="services">The services.</param>
         public void ConfigureServices(IServiceCollection services)
         {
+            //cache manager class added as a singleton to keep one instance alive in your application
             services.AddSingleton<dotnet_common.Interface.ICacheManager, dotnet_common.CacheManager.MemoryCache>();
+
+            //file system utility
             services.AddScoped<dotnet_common.Interface.IFileSystemUtility, dotnet_common.FileSystemUtility.SystemIO>();
+
+            //marshaller that uses the data contract serializer
             services.AddScoped<dotnet_common.Interface.IMarshaller, dotnet_common.Marshaller.DataContractSerializer>();
+
+            //encyption utility that uses AES
+            services
+                .AddScoped<dotnet_common.Interface.IEncryptionUtility,
+                    dotnet_common.EncryptionUtility.AesEncryptionUtility>();
 
             services.AddMvc();
         }

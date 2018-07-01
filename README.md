@@ -27,6 +27,9 @@ services.AddScoped<dotnet_common.Interface.IFileSystemUtility, dotnet_common.Fil
 
 //marshaller that uses the data contract serializer
 services.AddScoped<dotnet_common.Interface.IMarshaller, dotnet_common.Marshaller.DataContractSerializer>();
+
+//encyption utility that uses AES
+services.AddScoped<dotnet_common.Interface.IEncryptionUtility, dotnet_common.EncryptionUtility.AesEncryptionUtility>();
 ```
 
 Next you can use whichever class you want in your controllers by adding them like so:
@@ -38,14 +41,17 @@ public class ValuesController : Controller
     private readonly dotnet_common.Interface.ICacheManager _cacheManager;
     private readonly dotnet_common.Interface.IMarshaller _marshaller;
     private readonly dotnet_common.Interface.IFileSystemUtility _fileSystemUtility;
+    private readonly dotnet_common.Interface.IEncryptionUtility _encryptionUtility;
 
     public [ControllerName]Controller(dotnet_common.Interface.ICacheManager cacheManager,
         dotnet_common.Interface.IMarshaller marshaller,
-        dotnet_common.Interface.IFileSystemUtility fileSystemUtility)
+        dotnet_common.Interface.IFileSystemUtility fileSystemUtility,
+        dotnet_common.Interface.IEncryptionUtility encryptionUtility)
     {
         _cacheManager = cacheManager;
         _marshaller = marshaller;
         _fileSystemUtility = fileSystemUtility;
+        _encryptionUtility = encryptionUtility;
     }
 }
 ```
@@ -62,3 +68,4 @@ There is a sample project included in the code to show usage in a dotnet core we
 * [Cache Manager being used in a controller](https://github.com/heathesh/dotnet_common/blob/master/sample/dotnet_common.Sample.Web/Controllers/CacheSampleController.cs)
 * [File System Utility being used in a controller](https://github.com/heathesh/dotnet_common/blob/master/sample/dotnet_common.Sample.Web/Controllers/FileSystemUtilitySampleController.cs)
 * [Marshaller being used in a controller](https://github.com/heathesh/dotnet_common/blob/master/sample/dotnet_common.Sample.Web/Controllers/MarshallerSampleController.cs)
+* [Encryption utility being used in a controller](https://github.com/heathesh/dotnet_common/blob/master/sample/dotnet_common.Sample.Web/Controllers/EncryptionUtilitySampleController.cs)

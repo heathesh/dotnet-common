@@ -5,11 +5,11 @@
     <Authors>Heathesh Bhandari</Authors>
     <Company>MobileDev.co.za</Company>
     <Product />
-    <Description>Commonly used helpers for dotnet core, including a cache manager, a file system utility and a xml marshaller for serialization and deserialization.</Description>
+    <Description>Commonly used helpers for dotnet core, including a cache manager, a file system utility, a xml marshaller for serialization and deserialization and a simple encryption and decryption utility.</Description>
     <PackageLicenseUrl>https://raw.githubusercontent.com/heathesh/dotnet_common/master/LICENSE</PackageLicenseUrl>
     <PackageProjectUrl>https://github.com/heathesh/dotnet_common</PackageProjectUrl>
     <RepositoryUrl></RepositoryUrl>
-    <Version>1.0.1</Version>
+    <Version>1.1.0</Version>
   </PropertyGroup>
 
   <ItemGroup>
