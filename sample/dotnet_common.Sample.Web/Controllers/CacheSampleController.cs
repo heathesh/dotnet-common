@@ -24,11 +24,57 @@ namespace dotnet_common.Sample.Web.Controllers
         }
 
         /// <summary>
-        /// HTTP Get example using a local function
+        /// Gets the junk data.
+        /// </summary>
+        /// <param name="type">The type.</param>
+        /// <returns></returns>
+        private string[] GetJunkData(string type)
+        {
+            return new[] { $"{type}1", $"{type}2" };
+        }
+
+        /// <summary>
+        /// Gets the junk data asynchronous.
+        /// </summary>
+        /// <param name="type">The type.</param>
+        /// <returns></returns>
+        private async Task<string[]> GetJunkDataAsync(string type)
+        {
+            var result = new[] { $"{type}1", $"{type}2" };
+            return await Task.FromResult(result);
+        }
+
+        /// <summary>
+        /// HTTP Get example using a function (i.e. this could be any function that returns whatever you want to cache)
         /// </summary>
         /// <returns></returns>
         [HttpGet]
         public IEnumerable<string> Get()
+        {
+            return _cacheManager.ReturnFromCache(() => GetJunkData("Function"), 10, "CacheSampleController_Get");
+        }
+
+        /// <summary>
+        /// Asynchronous HTTP Get example using a function
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet("async")]
+        public async Task<IEnumerable<string>> GetAsync()
+        {
+            //parameter to show using CacheKeyParameter, pass in all the parameters that 
+            //make this particular item being cached uniquely identifiable
+            var async = "async";
+
+            return await _cacheManager.ReturnFromCacheAsync(() => GetJunkDataAsync("FunctionAsync"), 10,
+                "CacheSampleController_Get", new dotnet_common.Model.CacheKeyParameter(nameof(async), async));
+        }
+
+        /// <summary>
+        /// HTTP Get example using a local function
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet("localFunction")]
+        public IEnumerable<string> GetLocalFunction()
         {
             //create a string array to return
             var itemToCache = new[] { "localfunction1", "localfunction2" };
@@ -38,8 +84,13 @@ namespace dotnet_common.Sample.Web.Controllers
             //if the object is not already in the cached memory
             string[] Function() => itemToCache;
 
+            //parameter to show using CacheKeyParameter, pass in all the parameters that 
+            //make this particular item being cached uniquely identifiable
+            var localFunction = "localFunction";
+
             //return the value from the cache if it's not in the cache already
-            return _cacheManager.ReturnFromCache(Function, 10, "CacheSampleController_Get");
+            return _cacheManager.ReturnFromCache(Function, 10, "CacheSampleController_Get",
+                new dotnet_common.Model.CacheKeyParameter(nameof(localFunction), localFunction));
         }
 
         /// <summary>
@@ -47,7 +98,7 @@ namespace dotnet_common.Sample.Web.Controllers
         /// </summary>
         /// <returns></returns>
         [HttpGet("asyncLocalFunction")]
-        public async Task<IEnumerable<string>> GetAsync()
+        public async Task<IEnumerable<string>> GetLocalFunctionAsync()
         {
             //create a string array to return
             var itemToCache = new[] { "asyncLocalFunction1", "asyncLocalFunction2" };
@@ -60,8 +111,8 @@ namespace dotnet_common.Sample.Web.Controllers
                 return await Task.FromResult(itemToCache);
             }
 
-            //dummy parameter to show using CacheKeyParameter
-            //you pass in all the parameters that make this particular item being cached unique
+            //parameter to show using CacheKeyParameter, pass in all the parameters that 
+            //make this particular item being cached uniquely identifiable
             var asyncLocalFunction = "asyncLocalFunction";
 
             //return the value from the cache if it's not in the cache already
