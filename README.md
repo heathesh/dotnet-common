@@ -18,7 +18,7 @@ dotnet add package dotnet_common
 
 For use with the built in dependency injection framework of a .net core web app / api, install the package (as per above) and then add whichever service you would like to use to your ConfigureServices method in your startup.cs class:
 
-```
+```cs
 //cache manager class added as a singleton to keep one instance alive in your application
 services.AddSingleton<dotnet_common.Interface.ICacheManager, dotnet_common.CacheManager.MemoryCache>();
 
@@ -34,7 +34,7 @@ services.AddScoped<dotnet_common.Interface.IEncryptionUtility, dotnet_common.Enc
 
 Next you can use whichever class you want in your controllers by adding them like so:
 
-```
+```cs
 [Route("api/[controller]")]
 public class ValuesController : Controller
 {
