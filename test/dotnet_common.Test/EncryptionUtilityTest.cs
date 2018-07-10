@@ -104,5 +104,145 @@ namespace dotnet_common.Test
             Assert.False(string.IsNullOrWhiteSpace(decryptedString));
             Assert.Equal(text, decryptedString);
         }
+
+        /// <summary>
+        /// Tests that HashPassword returns a valid and populated hashed password entity
+        /// </summary>
+        [Fact]
+        public void HashPassword_Returns_HashedPassword_Entity()
+        {
+            var password = Guid.NewGuid().ToString();
+            var result = _encryptionUtility.HashPassword(password);
+
+            Assert.NotNull(result);
+            Assert.False(string.IsNullOrWhiteSpace(result.Password));
+            Assert.False(string.IsNullOrWhiteSpace(result.Salt));
+        }
+
+        /// <summary>
+        /// Tests that HashPassword returns a valid and populated hashed password entity when an empty password is used
+        /// </summary>
+        [Fact]
+        public void HashPassword_Returns_HashedPassword_Entity_Empty_Password()
+        {
+            var result = _encryptionUtility.HashPassword(string.Empty);
+
+            Assert.NotNull(result);
+            Assert.False(string.IsNullOrWhiteSpace(result.Password));
+            Assert.False(string.IsNullOrWhiteSpace(result.Salt));
+        }
+
+        /// <summary>
+        /// Tests that VerifyHashedPassword correctly matches a hashed password entity
+        /// </summary>
+        [Fact]
+        public void VerifyHashedPassword_Matches_HashedPassword_Entity()
+        {
+            var password = Guid.NewGuid().ToString();
+            var hashedPassword = _encryptionUtility.HashPassword(password);
+
+            Assert.NotNull(hashedPassword);
+            Assert.False(string.IsNullOrWhiteSpace(hashedPassword.Password));
+            Assert.False(string.IsNullOrWhiteSpace(hashedPassword.Salt));
+
+            var result = _encryptionUtility.VerifyHashedPassword(password, hashedPassword);
+
+            Assert.True(result);
+        }
+
+        /// <summary>
+        /// Tests that VerifyHashedPassword correctly matches a passed in hashed password and salt
+        /// </summary>
+        [Fact]
+        public void VerifyHashedPassword_Matches_String_HashedPassword_Salt()
+        {
+            var password = Guid.NewGuid().ToString();
+            var hashedPassword = _encryptionUtility.HashPassword(password);
+
+            Assert.NotNull(hashedPassword);
+            Assert.False(string.IsNullOrWhiteSpace(hashedPassword.Password));
+            Assert.False(string.IsNullOrWhiteSpace(hashedPassword.Salt));
+
+            var result =
+                _encryptionUtility.VerifyHashedPassword(password, hashedPassword.Password, hashedPassword.Salt);
+
+            Assert.True(result);
+        }
+
+        /// <summary>
+        /// Tests that VerifyHashedPassword correctly matches a hashed password entity when an empty password is used
+        /// </summary>
+        [Fact]
+        public void VerifyHashedPassword_Matches_HashedPassword_Entity_Empty_Password()
+        {
+            var password = string.Empty;
+            var hashedPassword = _encryptionUtility.HashPassword(password);
+
+            Assert.NotNull(hashedPassword);
+            Assert.False(string.IsNullOrWhiteSpace(hashedPassword.Password));
+            Assert.False(string.IsNullOrWhiteSpace(hashedPassword.Salt));
+
+            var result = _encryptionUtility.VerifyHashedPassword(password, hashedPassword);
+
+            Assert.True(result);
+        }
+
+        /// <summary>
+        /// Tests that VerifyHashedPassword correctly matches a passed in hashed password and salt when an empty password is used
+        /// </summary>
+        [Fact]
+        public void VerifyHashedPassword_Matches_String_HashedPassword_Salt_Empty_Password()
+        {
+            var password = string.Empty;
+            var hashedPassword = _encryptionUtility.HashPassword(password);
+
+            Assert.NotNull(hashedPassword);
+            Assert.False(string.IsNullOrWhiteSpace(hashedPassword.Password));
+            Assert.False(string.IsNullOrWhiteSpace(hashedPassword.Salt));
+
+            var result =
+                _encryptionUtility.VerifyHashedPassword(password, hashedPassword.Password, hashedPassword.Salt);
+
+            Assert.True(result);
+        }
+
+        /// <summary>
+        /// Tests that VerifyHashedPassword correctly does not match a hashed password entity
+        /// </summary>
+        [Fact]
+        public void VerifyHashedPassword_Does_Not_Match_HashedPassword_Entity()
+        {
+            var password = Guid.NewGuid().ToString();
+            var hashedPassword = _encryptionUtility.HashPassword(password);
+
+            Assert.NotNull(hashedPassword);
+            Assert.False(string.IsNullOrWhiteSpace(hashedPassword.Password));
+            Assert.False(string.IsNullOrWhiteSpace(hashedPassword.Salt));
+
+            var incorrectPassword = password.Substring(0, password.Length - 2);
+            var result = _encryptionUtility.VerifyHashedPassword(incorrectPassword, hashedPassword);
+
+            Assert.False(result);
+        }
+
+        /// <summary>
+        /// Tests that VerifyHashedPassword correctly does not match a passed in hashed password and salt
+        /// </summary>
+        [Fact]
+        public void VerifyHashedPassword_Does_Not_Match_String_HashedPassword_Salt()
+        {
+            var password = Guid.NewGuid().ToString();
+            var hashedPassword = _encryptionUtility.HashPassword(password);
+
+            Assert.NotNull(hashedPassword);
+            Assert.False(string.IsNullOrWhiteSpace(hashedPassword.Password));
+            Assert.False(string.IsNullOrWhiteSpace(hashedPassword.Salt));
+
+            var incorrectPassword = password.Substring(0, password.Length - 2);
+            var result =
+                _encryptionUtility.VerifyHashedPassword(incorrectPassword, hashedPassword.Password, hashedPassword.Salt);
+
+            Assert.False(result);
+        }
     }
 }

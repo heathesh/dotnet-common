@@ -9,7 +9,8 @@
     <PackageLicenseUrl>https://raw.githubusercontent.com/heathesh/dotnet_common/master/LICENSE</PackageLicenseUrl>
     <PackageProjectUrl>https://github.com/heathesh/dotnet_common</PackageProjectUrl>
     <RepositoryUrl></RepositoryUrl>
-    <Version>1.1.0</Version>
+    <Version>1.2.0</Version>
+    <PackageReleaseNotes>Added new methods to IEncryptionUtility to hash a password and verify the password using the hash.</PackageReleaseNotes>
   </PropertyGroup>
 
   <ItemGroup>
